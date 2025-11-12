@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "authorizations": {
+      "$groupId": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": false
+        }
+      }
+    },
+    "sessions": {
+      "$groupId": {
+        ".read": "auth != null && root.child('authorizations').child($groupId).child(auth.uid).exists()",
+        ".write": "auth != null && root.child('authorizations').child($groupId).child(auth.uid).exists()"
+      }
+    }
+  }
+}
+

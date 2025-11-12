@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Prevent clients from reading groupPins
+    // Only Cloud Functions can access this collection
+    match /groupPins/{document=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+    
+    // Add other collections and rules as needed for your game
+    // Example: Allow authenticated users to read/write their own game data
+    // match /gameData/{userId} {
+    //   allow read, write: if request.auth != null && request.auth.uid == userId;
+    // }
+  }
+}
+

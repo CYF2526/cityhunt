@@ -1,0 +1,15 @@
+{
+  "functions": [
+    {
+      "source": "backend_code",
+      "codebase": "default"
+    }
+  ],
+  "firestore": {
+    "rules": "backend_code/firestore.rules"
+  },
+  "database": {
+    "rules": "backend_code/database.rules.json"
+  }
+}
+

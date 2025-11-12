@@ -1,0 +1,57 @@
+[
+  {
+    "stageId": 1,
+    "stageName": "The First Clue",
+    "title": "Welcome to City Hunt!",
+    "description": "Your journey begins here. Visit https://example.com/clue1 to find your first clue. Look for the answer in the description.",
+    "media": [
+      {
+        "type": "image",
+        "url": "https://example.com/image1.jpg",
+        "alt": "First clue image"
+      }
+    ],
+    "mediaType": "image",
+    "answer": "cityhunt",
+    "validationFunction": "default",
+    "hint": "Check the website description carefully!"
+  },
+  {
+    "stageId": 2,
+    "stageName": "The Second Challenge",
+    "title": "Find the Hidden Message",
+    "description": "Look at this image carefully. What word do you see?",
+    "media": [
+      {
+        "type": "image",
+        "url": "https://example.com/clue2.jpg",
+        "alt": "Hidden message image"
+      }
+    ],
+    "mediaType": "image",
+    "answer": "treasure,hidden,secret",
+    "validationFunction": "stage2",
+    "hint": "The answer might be one of several words..."
+  },
+  {
+    "stageId": 3,
+    "stageName": "Video Clue",
+    "title": "Watch and Learn",
+    "description": "Watch this video and find the keyword mentioned.",
+    "media": [
+      {
+        "type": "video",
+        "url": "https://example.com/clue3.mp4",
+        "alt": "Video clue"
+      }
+    ],
+    "mediaType": "video",
+    "answer": "keyword",
+    "validationFunction": "stage3",
+    "hint": "Listen carefully to what the narrator says!"
+  }
+]
+
+
+
+
