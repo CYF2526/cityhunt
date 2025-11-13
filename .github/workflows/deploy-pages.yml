@@ -53,6 +53,9 @@ jobs:
         working-directory: ./web # Run this step inside the /web folder
         run: npm run build # Change to 'yarn build' or 'pnpm build' if needed
         # This step uses the .env file created above
+        
+      - name: Create 404.html for SPA routing
+        run: cp ./web/dist/index.html ./web/dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

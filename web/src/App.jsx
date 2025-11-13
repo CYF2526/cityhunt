@@ -65,7 +65,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router basename='/cityhunt'>
       <div className="app">
         <header className="top-bar">
           <h1 className="top-bar-title">CYF 2526 CITY HUNT</h1>
