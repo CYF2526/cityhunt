@@ -65,7 +65,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router basename='/cityhunt'>
       <div className="app">
         <header className="top-bar">
           <div className="top-bar-content">
