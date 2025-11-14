@@ -16,6 +16,7 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
   const [isCorrect, setIsCorrect] = useState(false)
   const [progress, setProgress] = useState({ currentStage: 0, completedStages: [], totalStages: 0 })
   const [hasInitialized, setHasInitialized] = useState(false)
+  const [activeTab, setActiveTab] = useState('game') // 'game' or 'profile'
   const navigate = useNavigate()
 
   const loadProgress = useCallback(async (groupId, isInitial = false) => {
@@ -182,6 +183,7 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
     navigate('/login', { replace: true })
   }
 
+
   // Don't render if not logged in
   if (!currentGroup) {
     return null
@@ -223,31 +225,34 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
 
   return (
     <div className="game-container">
-      {/* Navigation Bar */}
-      <div className="stage-navigation">
-        <button
-          className="nav-button nav-button-back"
-          onClick={handleBack}
-          disabled={isFirstStage || loading || submitting}
-        >
-          ← Back
-        </button>
-        
-        <div className="stage-name">
-          {loading ? 'Loading...' : (stageData?.stageName || `Stage ${currentStageId}`)}
-        </div>
-        
-        <button
-          className="nav-button nav-button-next"
-          onClick={handleNext}
-          disabled={!canGoNext || loading || submitting}
-        >
-          Next →
-        </button>
-      </div>
+      {/* Game Tab Content */}
+      {activeTab === 'game' && (
+        <>
+          {/* Navigation Bar */}
+          <div className="stage-navigation">
+            <button
+              className="nav-button nav-button-back"
+              onClick={handleBack}
+              disabled={isFirstStage || loading || submitting}
+            >
+              ← Back
+            </button>
+            
+            <div className="stage-name">
+              {loading ? 'Loading...' : (stageData?.stageName || `Stage ${currentStageId}`)}
+            </div>
+            
+            <button
+              className="nav-button nav-button-next"
+              onClick={handleNext}
+              disabled={!canGoNext || loading || submitting}
+            >
+              Next →
+            </button>
+          </div>
 
-      {/* Main Content Area */}
-      <div className="game-content-wrapper">
+          {/* Main Content Area */}
+          <div className="game-content-wrapper">
         {loading ? (
           <div className="loading-container">
             <div className="loading-spinner"></div>
@@ -340,11 +345,50 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
           </div>
         )}
       </div>
+        </>
+      )}
 
-      {/* Logout Button (top right) */}
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
+      {/* Profile Tab Content */}
+      {activeTab === 'profile' && (
+        <div className="profile-content-wrapper">
+          <div className="profile-content">
+            <div className="profile-item">
+              <h2 className="profile-label">Stages Completed</h2>
+              <div className="profile-value">
+                {progress.completedStages?.length || 0} / {progress.totalStages || 0}
+              </div>
+            </div>
+            <div className="profile-item">
+              <button className="profile-logout-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Navigation Bar */}
+      <div className="bottom-nav">
+        <button
+          className={`bottom-nav-item ${activeTab === 'game' ? 'active' : ''}`}
+          onClick={() => setActiveTab('game')}
+        >
+          <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span className="bottom-nav-label">Game</span>
+        </button>
+        <button
+          className={`bottom-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
+          onClick={() => setActiveTab('profile')}
+        >
+          <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span className="bottom-nav-label">Profile</span>
+        </button>
+      </div>
     </div>
   )
 }

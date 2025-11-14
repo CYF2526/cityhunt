@@ -68,12 +68,16 @@ function App() {
     <Router>
       <div className="app">
         <header className="top-bar">
-          <h1 className="top-bar-title">CYF 2526 CITY HUNT</h1>
-          {currentGroup && (
-            <div className="top-bar-group">
-              {formatGroupName(currentGroup)}
+          <div className="top-bar-content">
+            <div className="top-bar-text">
+              <h1 className="top-bar-title">CYF 2526 CITY HUNT</h1>
+              {currentGroup && (
+                <div className="top-bar-group">
+                  {formatGroupName(currentGroup)}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </header>
         <main className="main-content">
           <Routes>
