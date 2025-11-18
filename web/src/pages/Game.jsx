@@ -36,6 +36,7 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
         if (isInitial) {
           // Set current stage to the first unlocked stage (currentStage + 1, or 1 if no progress)
           const firstUnlockedStage = progressData.currentStage === 0 ? 1 : progressData.currentStage + 1
+          // Allow navigation up to totalStages (includes finish stage)
           setCurrentStageId(Math.min(firstUnlockedStage, progressData.totalStages || 1))
         }
       }
@@ -164,7 +165,13 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
   }
 
   const handleNext = () => {
-    if (currentStageId < progress.totalStages && isCorrect) {
+    // Allow navigation to next stage if:
+    // 1. Not on the last playable stage (currentStageId < playableStages) and current stage is correct, OR
+    // 2. On the last playable stage (currentStageId === playableStages) and all playable stages are completed
+    const playableStages = Math.max(0, (progress.totalStages || 0) - 1)
+    const allPlayableStagesCompleted = progress.completedStages?.length === playableStages && playableStages > 0
+    if ((currentStageId < playableStages && isCorrect) || 
+        (currentStageId === playableStages && allPlayableStagesCompleted)) {
       setCurrentStageId(currentStageId + 1)
     }
   }
@@ -190,13 +197,19 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
   }
 
   const isFirstStage = currentStageId === 1
-  const isLastStage = currentStageId >= progress.totalStages
+  // Calculate playable stages (totalStages - 1, since last stage is finish stage without answer)
+  const playableStages = Math.max(0, (progress.totalStages || 0) - 1)
+  const isLastStage = currentStageId >= playableStages
   // A stage without an answer field is considered the last stage
   // hasAnswer defaults to true for backward compatibility (if undefined, assume it has an answer)
   const hasNoAnswer = stageData?.hasAnswer === false
   const isEffectivelyLastStage = isLastStage || hasNoAnswer
-  const canGoNext = isCorrect && !isEffectivelyLastStage
-  const allStagesCompleted = progress.completedStages?.length === progress.totalStages && progress.totalStages > 0
+  // Check if all playable stages are completed (playableStages excludes the finish stage)
+  const allStagesCompleted = progress.completedStages?.length === playableStages && playableStages > 0
+  // Allow going to next stage if: (1) current stage is correct and not last playable stage, OR
+  // (2) on last playable stage and all playable stages are completed (to go to finish stage)
+  const canGoNext = (isCorrect && currentStageId < playableStages) || 
+                    (currentStageId === playableStages && allStagesCompleted)
   // Show submission form only if stage has an answer field (or hasAnswer is undefined for backward compatibility) and is not correct
   const showSubmissionForm = !isCorrect && (stageData?.hasAnswer !== false)
 
@@ -373,7 +386,16 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
             <div className="profile-item">
               <h2 className="profile-label">Stages Completed</h2>
               <div className="profile-value">
-                {progress.completedStages?.length || 0} / {progress.totalStages || 0}
+                {(() => {
+                  const playableStages = Math.max(0, (progress.totalStages || 0) - 1)
+                  const allPlayableCompleted = progress.completedStages?.length === playableStages && playableStages > 0
+                  const onFinishStage = currentStageId === (progress.totalStages || 0)
+                  // Show full count when on finish stage and all playable stages are completed
+                  const displayCount = (allPlayableCompleted && onFinishStage) 
+                    ? (progress.totalStages || 0) 
+                    : (progress.completedStages?.length || 0)
+                  return `${displayCount} / ${progress.totalStages || 0}`
+                })()}
               </div>
             </div>
             <div className="profile-item">

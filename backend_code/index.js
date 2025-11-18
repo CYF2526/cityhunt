@@ -355,6 +355,8 @@ exports.getGroupProgress = functions.https.onCall(async (data, context) => {
 
     // Get total number of stages from Firestore
     // Stages are stored as stage1, stage2, etc., so we count all documents
+    // Return the actual total (includes finish stage) for display purposes
+    // Frontend will use (totalStages - 1) for playable stages logic
     const stagesSnapshot = await db.collection('stages').get()
     const totalStages = stagesSnapshot.size
 
