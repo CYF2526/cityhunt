@@ -191,10 +191,14 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
 
   const isFirstStage = currentStageId === 1
   const isLastStage = currentStageId >= progress.totalStages
-  const canGoNext = isCorrect && !isLastStage
+  // A stage without an answer field is considered the last stage
+  // hasAnswer defaults to true for backward compatibility (if undefined, assume it has an answer)
+  const hasNoAnswer = stageData?.hasAnswer === false
+  const isEffectivelyLastStage = isLastStage || hasNoAnswer
+  const canGoNext = isCorrect && !isEffectivelyLastStage
   const allStagesCompleted = progress.completedStages?.length === progress.totalStages && progress.totalStages > 0
-  // Show submission form only if stage is not correct (form is hidden when last stage is completed)
-  const showSubmissionForm = !isCorrect
+  // Show submission form only if stage has an answer field (or hasAnswer is undefined for backward compatibility) and is not correct
+  const showSubmissionForm = !isCorrect && (stageData?.hasAnswer !== false)
 
   // Render description with support for links and formatting
   const renderDescription = (description) => {
@@ -311,7 +315,7 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
 
             {/* Answer Section */}
             <div className="answer-section">
-              {isCorrect && (
+              {isCorrect && stageData?.hasAnswer !== false && (
                 <div className="success-indicator">
                   <span className="tick-icon">✓</span>
                   <span>{stageData.successMessage || 'Correct! You can proceed to the next stage.'}</span>

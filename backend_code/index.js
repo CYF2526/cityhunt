@@ -186,6 +186,7 @@ exports.getStageContent = functions.https.onCall(async (data, context) => {
 
     const stageData = stageDoc.data()
     const isCompleted = completedStages.includes(stageNum)
+    const hasAnswer = stageData.answer !== undefined && stageData.answer !== null && stageData.answer !== ''
 
     // Return stage content (without the answer)
     return {
@@ -197,7 +198,8 @@ exports.getStageContent = functions.https.onCall(async (data, context) => {
       media: stageData.media || [],
       mediaType: stageData.mediaType || 'none', // 'none', 'image', 'video', 'both'
       isCompleted: isCompleted,
-      isUnlocked: true
+      isUnlocked: true,
+      hasAnswer: hasAnswer
     }
   } catch (error) {
     if (error instanceof functions.https.HttpsError) {
@@ -252,6 +254,15 @@ exports.validateAnswer = functions.https.onCall(async (data, context) => {
 
     const stageData = stageDoc.data()
     const correctAnswer = stageData.answer
+    
+    // If stage doesn't have an answer field, it's considered the last stage and doesn't accept submissions
+    if (correctAnswer === undefined || correctAnswer === null || correctAnswer === '') {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'This stage does not accept answer submissions.'
+      )
+    }
+    
     const validationFunctionName = stageData.validationFunction || 'default'
     const hint = stageData.hint || 'Try again!'
 
