@@ -192,6 +192,9 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
   const isFirstStage = currentStageId === 1
   const isLastStage = currentStageId >= progress.totalStages
   const canGoNext = isCorrect && !isLastStage
+  const allStagesCompleted = progress.completedStages?.length === progress.totalStages && progress.totalStages > 0
+  // Show submission form only if stage is not correct (form is hidden when last stage is completed)
+  const showSubmissionForm = !isCorrect
 
   // Render description with support for links and formatting
   const renderDescription = (description) => {
@@ -259,9 +262,18 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
             <p>Loading stage content...</p>
           </div>
         ) : stageData ? (
-          <div className="stage-content">
+          <div className={`stage-content ${allStagesCompleted ? 'all-completed' : ''}`}>
             {/* Title */}
             <h2 className="stage-title">{stageData.title}</h2>
+            
+            {/* Celebration Message */}
+            {allStagesCompleted && (
+              <div className="celebration-message">
+                <div className="celebration-icon">🎉</div>
+                <h3 className="celebration-title">Congratulations!</h3>
+                <p className="celebration-text">You've completed all stages of the City Hunt!</p>
+              </div>
+            )}
 
             {/* Description */}
             {renderDescription(stageData.description)}
@@ -316,24 +328,26 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
                 </div>
               )}
 
-              {!isCorrect && <form onSubmit={handleSubmit} className="answer-form">
-                <input
-                  type="text"
-                  value={answer}
-                  onChange={handleAnswerChange}
-                  placeholder="Enter your answer (letters, numbers, and spaces only)"
-                  className="answer-input"
-                  disabled={isCorrect || submitting || loading}
-                  maxLength={200}
-                />
-                <button
-                  type="submit"
-                  className="submit-button"
-                  disabled={isCorrect || submitting || loading || !answer.trim()}
-                >
-                  {submitting ? 'Submitting...' : 'Submit'}
-                </button>
-              </form>}
+              {showSubmissionForm && (
+                <form onSubmit={handleSubmit} className="answer-form">
+                  <input
+                    type="text"
+                    value={answer}
+                    onChange={handleAnswerChange}
+                    placeholder="Enter your answer (letters, numbers, and spaces only)"
+                    className="answer-input"
+                    disabled={isCorrect || submitting || loading}
+                    maxLength={200}
+                  />
+                  <button
+                    type="submit"
+                    className="submit-button"
+                    disabled={isCorrect || submitting || loading || !answer.trim()}
+                  >
+                    {submitting ? 'Submitting...' : 'Submit'}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         ) : (

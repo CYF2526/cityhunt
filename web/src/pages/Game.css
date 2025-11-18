@@ -103,6 +103,81 @@
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.stage-content.all-completed {
+  background: linear-gradient(135deg, #fff9c4 0%, #ffffff 50%, #e8f5e9 100%);
+  border: 3px solid #4caf50;
+  box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+  animation: celebrationPulse 2s ease-in-out infinite;
+}
+
+@keyframes celebrationPulse {
+  0%, 100% {
+    box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    box-shadow: 0 12px 24px rgba(76, 175, 80, 0.5);
+  }
+}
+
+/* Celebration Message */
+.celebration-message {
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem 0;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 16px;
+  border: 3px solid #4caf50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  animation: celebrationSlideIn 0.6s ease-out;
+}
+
+@keyframes celebrationSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.celebration-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: celebrationBounce 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes celebrationBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+.celebration-title {
+  color: #2e7d32;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.celebration-text {
+  color: #1b5e20;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0 0;
+  line-height: 1.6;
 }
 
 .stage-title {
@@ -484,6 +559,23 @@
   .submit-button {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
+  }
+
+  .celebration-message {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .celebration-icon {
+    font-size: 3rem;
+  }
+
+  .celebration-title {
+    font-size: 2rem;
+  }
+
+  .celebration-text {
+    font-size: 1.1rem;
   }
 
 }
