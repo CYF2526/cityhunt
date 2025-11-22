@@ -394,7 +394,7 @@ function Game({ setIsAuthenticated, setCurrentGroup }) {
                   const displayCount = (allPlayableCompleted && onFinishStage) 
                     ? (progress.totalStages || 0) 
                     : (progress.completedStages?.length || 0)
-                  return `${displayCount} / ${progress.totalStages - 1 || 0}`
+                  return `${displayCount} / ${progress.totalStages || 0}`
                 })()}
               </div>
             </div>
